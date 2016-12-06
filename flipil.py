@@ -23,9 +23,11 @@ class flipil:
             self.command = []
             for row_n, seg_row in enumerate(arrangement):
                 for col_n, seg_col in enumerate(seg_row):
-                    self.command.append([0x00] * 31)
+                    self.command.append([0x00] * 32)
                     self.command[row_n][0] = 0x80  # Header
                     self.command[row_n][1] = 0x83  # Mode
+		    self.command[row_n][2] = 0x00
+                    self.command[row_n][31] = 0x8F  # End
                     self.command[row_n][2] = arrangement[row_n][col_n]  # Panel Addresss
 
     def _make_image(self):
@@ -49,6 +51,10 @@ class flipil:
         self.serial = serial.Serial(port, baud)
         self.portset = True
 
+    def send(self):
+        for message in self.command:
+            values = bytearray(message)
+            self.serial.write(values)
 
     def _translate(self):
         img_array = numpy.array(self._img)
@@ -62,8 +68,8 @@ class flipil:
                 lower_row_pixel = row_n * self.paneldims[1]
                 upper_row_pixel = lower_row_pixel + self.paneldims[1]
 
-                print lower_columb_pixel, upper_columb_pixel
-                print lower_row_pixel, upper_row_pixel
+                #print lower_columb_pixel, upper_columb_pixel
+                #print lower_row_pixel, upper_row_pixel
 
                 #render panel
                 for x in range(lower_columb_pixel, upper_columb_pixel):
@@ -86,7 +92,25 @@ class flipil:
 
 
 if __name__ == "__main__":
-    panel1 = flipil("alfa_zeta", [28, 7], [[1],[2],[3],[4],[5],[6]])
-    #panel1.set_port('COM0',57600)
-    panel1.putpixel([2,3],255)
-    panel1._translate()
+
+    from time import sleep    
+    refresh = [0x80,0x82,0x8F]
+
+    panel1 = flipil("alfa_zeta", [28, 7], [[1],[2],[3],[4],[5],[6]], init_color = 255)
+    panel1.set_port('/dev/ttyAMA0',9600)
+
+    while True:
+
+    	panel1.putpixel([2,3],255)
+    	panel1._translate()
+	panel1.send()
+        panel1.serial.write(refresh)
+
+	sleep(1)
+    	panel1.putpixel([2,3],0)
+    	panel1._translate()
+	panel1.send()
+        panel1.serial.write(refresh)
+	sleep(1)
+
+
