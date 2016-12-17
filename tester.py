@@ -18,13 +18,13 @@ while True:
             message[i+3] = 0x7F
         values = bytearray(message)
         dots.write(values)
-  #      dots.write(refresh)
+        dots.write(refresh)
 	print message
  #       sleep(1)
         for i in range(28):
             message[i+3] = 0x00
         values = bytearray(message)
         dots.write(values)
-#        dots.write(refresh)
+        dots.write(refresh)
         print message
  #       sleep(1)
