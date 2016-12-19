@@ -30,6 +30,9 @@ class flipil:
                     self.command[row_n][31] = 0x8F  # End
                     self.command[row_n][2] = arrangement[row_n][col_n]  # Panel Addresss
 
+    def clear(self):
+        self._img = Image.new('L', [self.width, self.height], color=self.init_color)
+
     def _make_image(self):
 
         # get the largest width of the panel
