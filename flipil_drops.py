@@ -66,9 +66,7 @@ if __name__ == "__main__":
         for i in range(len(drops)):
             print drops[i].pos
 
-	print "drops/test%03d.jpg" % p
-	sim(panel1._img).save("drops/test%03d.jpg" % p)
-        sleep(.5)
+        #sleep(.5)
         panel1._translate()
         panel1.send()
         panel1.clear()

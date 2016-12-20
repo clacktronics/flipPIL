@@ -2,7 +2,7 @@ import sys, numpy, os, serial
 from PIL import Image, ImageDraw 
 from time import sleep 
 
-dots = serial.Serial('/dev/ttyAMA0',9600) 
+dots = serial.Serial('/dev/ttyAMA0',57600) 
 
 
 message = ([0x00]*32) 
@@ -20,11 +20,11 @@ while True:
         dots.write(values)
         dots.write(refresh)
 	print message
- #       sleep(1)
+        sleep(1)
         for i in range(28):
             message[i+3] = 0x00
         values = bytearray(message)
         dots.write(values)
         dots.write(refresh)
         print message
- #       sleep(1)
+        sleep(1)

@@ -31,7 +31,7 @@ class flipil:
                     self.command[row_n][2] = arrangement[row_n][col_n]  # Panel Addresss
 
     def clear(self):
-        self._img = Image.new('L', [self.width, self.height], color=self.init_color)
+        self._img = Image.new('1', [self.width, self.height], color=self.init_color)
 
     def _make_image(self):
 
@@ -48,7 +48,7 @@ class flipil:
         self.width = self.panels_w * self.paneldims[0]
         self.height = self.panels_h * self.paneldims[1]
 
-        self._img = Image.new('L', [self.width, self.height], color=self.init_color)
+        self._img = Image.new('1', [self.width, self.height], color=self.init_color)
 
     def set_port(self, port, baud):
         self.serial = serial.Serial(port, baud)
@@ -79,7 +79,7 @@ class flipil:
                     output = 0
                     for yn, y in enumerate(range(lower_row_pixel,upper_row_pixel)):
                         bin = 2 ** (yn % 7)
-                        if img_array[y][x] == 255:
+                        if img_array[y][x] == 1:
                             output += bin
 
                     self.command[panel_count][x+3] = output
