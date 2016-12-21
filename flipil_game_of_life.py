@@ -8,7 +8,7 @@ if __name__ == "__main__":
 
 
     from time import sleep
-    from PIL import ImageDraw
+    from PIL import ImageDraw, Image
     from random import randrange
     refresh = [0x80,0x82,0x8F]
 
@@ -28,10 +28,20 @@ if __name__ == "__main__":
         return img
 
 	
- 
-    draw = ImageDraw.Draw(panel1)
-    draw.ellipse((10,10,20,20), outline=1, fill=0)
+    im = Image.new("1",(42,28), color=0)
+    drw = ImageDraw.Draw(im)
+    drw.text((0,0),"Game Of", fill=1)
+    drw.text((10,10),"Life", fill=1)
+    im = im.rotate(90, expand=1)
+    panel1.paste(im) 
 
+    #draw = ImageDraw.Draw(panel1)
+    #draw.ellipse((10,10,20,30), outline=1, fill=0)
+    #draw.rectangle((0,30,10,35), outline=1, fill=1)
+#    draw.line((20,10,22,10), width=1, fill=1)
+    panel1._translate()
+    panel1.send()
+    sleep(5)
     while True:
 
         panel1._translate()
@@ -39,7 +49,7 @@ if __name__ == "__main__":
         #panel1.clear()
 
 
-
+        output = []
 	for pixel_x in range(panel1.width):
             for pixel_y in range(panel1.height):
 
@@ -66,10 +76,22 @@ if __name__ == "__main__":
                 for location in GOL:
                     if location is not 'alive':         #only look at other squares
                         population_count+=GOL[location] # add the value as if 0 it will do nothing anyway
-                if GOL['alive']: # If alive
-                    if population_count < 2 or population_count > 3: panel1.putpixel((pixel_x,pixel_y),0)
+
+#		print pixel_x, pixel_y, GOL, population_count, 
+
+                if GOL['alive']==1: # If alive
+                    if population_count < 2 or population_count > 3: 
+                        #panel1.putpixel((pixel_x,pixel_y),0)
+                        output.append([pixel_x, pixel_y, 0])
                 else: # If dead
-                    if population_count == 3: panel1.putpixel((pixel_x,pixel_y),1)
+                    if population_count == 3:
+			#panel1.putpixel((pixel_x,pixel_y),1)
+                        output.append([pixel_x, pixel_y, 1])
+
+
+              
+        for ip, p in enumerate(output):
+            panel1.putpixel((output[ip][0], output[ip][1]),output[ip][2])
 
 	print 'boop'
 

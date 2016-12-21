@@ -84,7 +84,7 @@ class flipil:
 
                     self.command[panel_count][x+3] = output
 
-                print self.command[panel_count]
+                #print self.command[panel_count]
                 panel_count += 1
 
 

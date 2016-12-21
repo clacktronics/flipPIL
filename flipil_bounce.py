@@ -31,7 +31,7 @@ if __name__ == "__main__":
  
     draw = ImageDraw.Draw(panel1)
 
-    size = 16
+    size = 24
     dir_x = 1
     dir_y = 1
     x = 1
@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
         panel1.clear()
         draw = ImageDraw.Draw(panel1)
-        draw.text((0,20), "BEN!", fill=1)
+#        draw.text((0,20), "BEN!", fill=1)
         draw.ellipse((x,y,x+size,y+size), outline=1, fill=0)
 
         panel1._translate()
