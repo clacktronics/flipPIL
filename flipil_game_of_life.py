@@ -65,8 +65,7 @@ if __name__ == "__main__":
                 population_count = 0
                 for location in GOL:
                     if location is not 'alive':         #only look at other squares
-                        try: population_count+=GOL[location] # add the value as if 0 it will do nothing anyway
-                        except: print "off edge"
+                        population_count+=GOL[location] # add the value as if 0 it will do nothing anyway
                 if GOL['alive']: # If alive
                     if population_count < 2 or population_count > 3: panel1.putpixel((pixel_x,pixel_y),0)
                 else: # If dead
