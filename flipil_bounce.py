@@ -12,7 +12,7 @@ if __name__ == "__main__":
     from random import randrange
     refresh = [0x80,0x82,0x8F]
 
-    panel1 = flipil("alfa_zeta", [28, 7], [[1,2],[3,4]], init_color = 0, reverse_panel=False)
+    panel1 = flipil("alfa_zeta", [28, 7], [[1,3,5],[2,4,6]], init_color = 0, reverse_panel=False)
     panel1.set_port('/dev/ttyAMA0', 57600)
 
     def sim(image):

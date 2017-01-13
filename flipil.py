@@ -89,16 +89,15 @@ class flipil:
                         if img_array[y][x] == 1:
                             output += bin
 
-                    #print "Panel count:%d self_command:%d  x:%d x_pos:%d" % (panel_count,len(self.command),x,((x-1%27)+3))
-
                     # as x is abosulte pixel position of the whole panel we want to make it relative to this panel. 
-                    if x > 27:
-                        adr = (x-1)%27
+                    if x > 28:
+                        adr = (x-1)%28
                         self.command[panel_count][adr+3] = output
                     else: 
                         self.command[panel_count][x+3] = output
 
-                print panel_count, self.command[panel_count]
+
+                #print panel_count, self.command[panel_count]
 
 		if self.reverse_panel:
 			flipped_section = self.command[panel_count][3:31]
@@ -106,7 +105,7 @@ class flipil:
 			new_command = self.command[panel_count][0:3] + flipped_section + [self.command[panel_count][31]]
 			self.command[panel_count] = new_command
 
-                print self.command[panel_count]
+                #print self.command[panel_count]
 
 
                 panel_count += 1
