@@ -90,8 +90,8 @@ class flipil:
                             output += bin
 
                     # as x is abosulte pixel position of the whole panel we want to make it relative to this panel. 
-                    if x > 28:
-                        adr = (x-1)%28
+                    if x > 27:
+                        adr = x%28
                         self.command[panel_count][adr+3] = output
                     else: 
                         self.command[panel_count][x+3] = output
