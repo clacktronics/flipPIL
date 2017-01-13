@@ -12,7 +12,7 @@ if __name__ == "__main__":
     from random import randrange
     refresh = [0x80,0x82,0x8F]
 
-    panel1 = flipil("alfa_zeta", [28, 7], [[1],[2],[3],[4],[5],[6]], init_color = 0)
+    panel1 = flipil("alfa_zeta", [28, 7], [[1,2],[2],[3],[4],[5],[6]], init_color = 0)
     panel1.set_port('/dev/ttyAMA0', 57600)
 
     def sim(image):
@@ -29,11 +29,12 @@ if __name__ == "__main__":
 
 
     class drop:
-        def __init__(self, pos, stop_point, waittostart):
+        def __init__(self, pos, length, stop_point, waittostart):
             self.stop_point = stop_point
             self.waitToStart = waittostart
             self.sCount = 0
             self.pos = [pos]
+            self.length = length
             self.end = False
 
         def move(self):
@@ -42,7 +43,7 @@ if __name__ == "__main__":
                 if self.pos[0][0] < self.stop_point:
                     if self.sCount > self.waitToStart:
                         self.pos.insert(1,self.pos[0][:])
-                        if len(self.pos) > 20:
+                        if len(self.pos) > self.length:
                             self.pos.pop()
                         self.pos[0][0] += randrange(0, 2)
                 elif len(self.pos) > 1:
@@ -56,7 +57,7 @@ if __name__ == "__main__":
     drops = []
     for i in range(10):
         segments = 28 / 10
-        drops.append(drop([-1,(i*segments) + randrange(0, 5)], randrange(10,42), randrange(20,100)))
+        drops.append(drop([-1,(i*segments) + randrange(0, 5)], randrange(5,40),randrange(10,42), randrange(20,100))) # ([x,y], length, stop_point, waittostart)
     p = 0
     ext = False
     while True:
@@ -92,7 +93,7 @@ if __name__ == "__main__":
 
             if drops[n].end == True:
                 segments = 28 / 5
-                drops[n] = drop([-1,(n*segments) + randrange(0, 5)], randrange(10,42), n * randrange(20,100))
+                drops[n] = drop([-1,(n*segments) + randrange(0, 5)], randrange(5,40),  randrange(10,42), n * randrange(20,100))
 
 
 
