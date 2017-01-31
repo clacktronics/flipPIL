@@ -12,7 +12,7 @@ if __name__ == "__main__":
     from random import randrange
     refresh = [0x80,0x82,0x8F]
 
-    panel1 = flipil("alfa_zeta", [28, 7], [[1,2],[2],[3],[4],[5],[6]], init_color = 0)
+    panel1 = flipil("alfa_zeta", [28,7], [[8,16,24],[7,15,23],[6,14,22],[5,13,21],[4,12,20],[3,11,19],[2,10,18],[1,9,17]], init_color = 0)
     panel1.set_port('/dev/ttyAMA0', 57600)
 
     def sim(image):
@@ -40,24 +40,24 @@ if __name__ == "__main__":
         def move(self):
             self.sCount += 1
             if not self.end:
-                if self.pos[0][0] < self.stop_point:
+                if self.pos[0][1] < self.stop_point:
                     if self.sCount > self.waitToStart:
                         self.pos.insert(1,self.pos[0][:])
                         if len(self.pos) > self.length:
                             self.pos.pop()
-                        self.pos[0][0] += randrange(0, 2)
+                        self.pos[0][1] += randrange(0, 2)
                 elif len(self.pos) > 1:
                     self.pos.pop()
                 else:
-                    self.pos[0][0] = 42
+                    self.pos[0][1] = -1
                     self.end = True
 
 
 
     drops = []
     for i in range(10):
-        segments = 28 / 10
-        drops.append(drop([-1,(i*segments) + randrange(0, 5)], randrange(5,40),randrange(10,42), randrange(20,100))) # ([x,y], length, stop_point, waittostart)
+        segments = 56 / 10
+        drops.append(drop([(i*segments) + randrange(0, 5),randrange(-10,84)], randrange(2,6),randrange(70,84), 0)) # ([x,y], length, stop_point, waittostart)
     p = 0
     ext = False
     while True:
@@ -71,10 +71,6 @@ if __name__ == "__main__":
         panel1._translate()
         panel1.send()
         panel1.clear()
-        if ext:
-            break
-
-        ext = True
 
         for n, i in enumerate(drops):
 
@@ -84,16 +80,14 @@ if __name__ == "__main__":
             for d, x in enumerate(drops[n].pos):
                 x = drops[n].pos[d][1]
                 y = drops[n].pos[d][0]
-                if x < 28:
-                    ext = False
                 try:
                     panel1.putpixel([x,y], 255)
                 except:
                     pass
 
             if drops[n].end == True:
-                segments = 28 / 5
-                drops[n] = drop([-1,(n*segments) + randrange(0, 5)], randrange(5,40),  randrange(10,42), n * randrange(20,100))
+                segments = 56 / 5
+                drops[n] = drop([(n*segments) + randrange(0, 5),randrange(-10,84)], randrange(2,6),randrange(70,84), 0) # ([x,y], length, stop_point, waittostart)
 
 
 

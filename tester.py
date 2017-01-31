@@ -13,18 +13,24 @@ message[-1] = 0x8F
  
 refresh = bytearray([0x80,0x82,0x8F]) 
 
+x = 1
 while True:
+
         for i in range(28):
             message[i+3] = 0x7F
         values = bytearray(message)
         dots.write(values)
         dots.write(refresh)
 	print message
-        sleep(1)
+        sleep(.5)
         for i in range(28):
             message[i+3] = 0x00
         values = bytearray(message)
         dots.write(values)
         dots.write(refresh)
         print message
-        sleep(1)
+        sleep(.5)
+
+	x += 1
+	if x > 24: x = 1
+        message[2] = x
