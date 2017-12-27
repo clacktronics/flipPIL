@@ -25,7 +25,7 @@ class flipil:
             self.command = []
             for row_n, seg_row in enumerate(arrangement):
                 for col_n, seg_col in enumerate(seg_row):
-                    print row_n, col_n, row_n+col_n
+                    #print row_n, col_n, row_n+col_n
                     self.command.append([0x00] * 32)
                     self.command[counter][0] = 0x80  # Header
                     self.command[counter][1] = 0x83  # Mode
@@ -33,7 +33,7 @@ class flipil:
                     self.command[counter][31] = 0x8F  # End
                     counter += 1
 
-	print self.command
+	#print self.command
 
     def clear(self):
         self._img = Image.new('1', [self.width, self.height], color=self.init_color)
@@ -89,11 +89,11 @@ class flipil:
                         if img_array[y][x] == 1:
                             output += bin
 
-                    # as x is abosulte pixel position of the whole panel we want to make it relative to this panel. 
+                    # as x is abosulte pixel position of the whole panel we want to make it relative to this panel.
                     if x > 27:
                         adr = x%28
                         self.command[panel_count][adr+3] = output
-                    else: 
+                    else:
                         self.command[panel_count][x+3] = output
 
 
@@ -119,7 +119,7 @@ class flipil:
 
 if __name__ == "__main__":
 
-    from time import sleep    
+    from time import sleep
     refresh = [0x80,0x82,0x8F]
 
     panel1 = flipil("alfa_zeta", [28, 7], [[1],[2],[3],[4],[5],[6]], init_color = 0)
@@ -138,5 +138,3 @@ if __name__ == "__main__":
         panel1.send()
         panel1.serial.write(refresh)
         sleep(1)
-
-

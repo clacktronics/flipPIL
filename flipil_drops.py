@@ -1,6 +1,12 @@
 from PIL import Image
 import numpy
 from flipil import flipil
+import socket
+
+
+# Set up network socket
+s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.bind(('localhost',1515))
 
 
 if __name__ == "__main__":
@@ -13,7 +19,7 @@ if __name__ == "__main__":
     refresh = [0x80,0x82,0x8F]
 
     panel1 = flipil("alfa_zeta", [28,7], [[8,16,24],[7,15,23],[6,14,22],[5,13,21],[4,12,20],[3,11,19],[2,10,18],[1,9,17]], init_color = 0)
-    panel1.set_port('/dev/ttyAMA0', 57600)
+    panel1.set_port('/dev/tty.Bluetooth-Incoming-Port', 57600)
 
     def sim(image):
         dot = 100
@@ -60,14 +66,25 @@ if __name__ == "__main__":
         drops.append(drop([(i*segments) + randrange(0, 5),randrange(-10,84)], randrange(2,6),randrange(70,84), 0)) # ([x,y], length, stop_point, waittostart)
     p = 0
     ext = False
+
+
+
     while True:
         p = p+1
 
 
-        for i in range(len(drops)):
-            print drops[i].pos
+        # for i in range(len(drops)):
+        #     print drops[i].pos
 
         #sleep(.5)
+        while True:
+            m=s.recvfrom(4)
+            print m[0]
+            
+            if m[0] == "step":
+                break
+
+        print "step"
         panel1._translate()
         panel1.send()
         panel1.clear()
@@ -88,12 +105,3 @@ if __name__ == "__main__":
             if drops[n].end == True:
                 segments = 56 / 5
                 drops[n] = drop([(n*segments) + randrange(0, 5),randrange(-10,84)], randrange(2,6),randrange(70,84), 0) # ([x,y], length, stop_point, waittostart)
-
-
-
-
-
-
-
-
-
