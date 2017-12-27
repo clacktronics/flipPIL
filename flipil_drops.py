@@ -3,10 +3,15 @@ import numpy
 from flipil import flipil
 import socket
 
+foreground = 255
+background = 0
+direction = "down"
 
 # Set up network socket
 s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.bind(('localhost',1515))
+
+panel_arr = [[8,16,24],[7,15,23],[6,14,22],[5,13,21],[4,12,20],[3,11,19],[2,10,18],[1,9,17]]
 
 
 if __name__ == "__main__":
@@ -18,8 +23,14 @@ if __name__ == "__main__":
     from random import randrange
     refresh = [0x80,0x82,0x8F]
 
-    panel1 = flipil("alfa_zeta", [28,7], [[8,16,24],[7,15,23],[6,14,22],[5,13,21],[4,12,20],[3,11,19],[2,10,18],[1,9,17]], init_color = 0)
-    panel1.set_port('/dev/tty.Bluetooth-Incoming-Port', 57600)
+
+
+    def init_panel():
+        panel1 = flipil("alfa_zeta", [28,7], panel_arr, init_color = foreground)
+        panel1.set_port('/dev/tty.Bluetooth-Incoming-Port', 57600)
+        return panel1
+
+    panel1 = init_panel()
 
     def sim(image):
         dot = 100
@@ -60,6 +71,7 @@ if __name__ == "__main__":
 
 
 
+
     drops = []
     for i in range(10):
         segments = 56 / 10
@@ -69,22 +81,49 @@ if __name__ == "__main__":
 
 
 
+
+
     while True:
         p = p+1
 
 
-        # for i in range(len(drops)):
-        #     print drops[i].pos
+
 
         #sleep(.5)
         while True:
             m=s.recvfrom(4)
             print m[0]
-            
+
+
             if m[0] == "step":
                 break
+            elif m[0] == "forw":
+                direction = "down"
+            elif m[0] == "back":
+                direction = "up"
+            elif m[0] == "bonw":
+                foreground = 0
+                background = 255
+                panel1 = init_panel()
+                panel1._translate()
+                panel1.send()
+                print "Black on white set"
+            elif m[0] == "wonb":
+                foreground = 255
+                background = 0
+                panel1 = init_panel()
+                panel1._translate()
+                panel1.send()
+                print "White on black set"
+            elif m[0] == "clear":
+                panel1.clear()
+                panel1._translate()
+                panel1.send()
 
-        print "step"
+
+        for i in range(len(drops)):
+            print drops[i].pos
+
         panel1._translate()
         panel1.send()
         panel1.clear()

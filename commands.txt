@@ -1,8 +1,8 @@
-step - make a step (also acts as write changes)
-forw - direction of sequence
-back - direction of sequence
-clea - all dots to same side
-bonw - Black on white
-wonb - White on black
+step - make a step  x
+forw - direction of sequence x
+back - direction of sequence x
+clea - all dots to same side x
+bonw - Black on white x
+wonb - White on black x
 ints - internal sync
 exts - external sync
