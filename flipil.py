@@ -35,8 +35,8 @@ class flipil:
 
 	#print self.command
 
-    def clear(self):
-        self._img = Image.new('1', [self.width, self.height], color=self.init_color)
+    def clear(self, colour):
+        self._img = Image.new('1', [self.width, self.height], color=colour)
 
     def _make_image(self):
 

@@ -44,6 +44,18 @@ if __name__ == "__main__":
                 drw.ellipse((xpos, ypos, xpos+dot, ypos+dot), fill=x )
         return img
 
+    def setup_drop(segment):
+
+        pos_x = segment + randrange(0, 5)
+        pos_y = randrange(-10,84)
+        length = randrange(2,6)
+        stop_point = randrange(70,84)
+        waittostart = 0
+
+        return drop([pos_x, pos_y], length, stop_point, waittostart)
+
+
+
 
     class drop:
         def __init__(self, pos, length, stop_point, waittostart):
@@ -73,9 +85,11 @@ if __name__ == "__main__":
 
 
     drops = []
-    for i in range(10):
+    # Setup each drop in list
+    # each drop has a window that it lives in which is the width / number of drops
+    for n in range(10):
         segments = 56 / 10
-        drops.append(drop([(i*segments) + randrange(0, 5),randrange(-10,84)], randrange(2,6),randrange(70,84), 0)) # ([x,y], length, stop_point, waittostart)
+        drops.append(setup_drop(n*segments))
     p = 0
     ext = False
 
@@ -104,19 +118,19 @@ if __name__ == "__main__":
             elif m[0] == "bonw":
                 foreground = 0
                 background = 255
-                panel1 = init_panel()
+                panel1.clear(background)
                 panel1._translate()
                 panel1.send()
                 print "Black on white set"
             elif m[0] == "wonb":
                 foreground = 255
                 background = 0
-                panel1 = init_panel()
+                panel1.clear(background)
                 panel1._translate()
                 panel1.send()
                 print "White on black set"
             elif m[0] == "clear":
-                panel1.clear()
+                panel1.clear(background)
                 panel1._translate()
                 panel1.send()
 
@@ -126,7 +140,7 @@ if __name__ == "__main__":
 
         panel1._translate()
         panel1.send()
-        panel1.clear()
+        panel1.clear(background)
 
         for n, i in enumerate(drops):
 
@@ -137,10 +151,10 @@ if __name__ == "__main__":
                 x = drops[n].pos[d][1]
                 y = drops[n].pos[d][0]
                 try:
-                    panel1.putpixel([x,y], 255)
+                    panel1.putpixel([x,y], foreground)
                 except:
                     pass
 
             if drops[n].end == True:
                 segments = 56 / 5
-                drops[n] = drop([(n*segments) + randrange(0, 5),randrange(-10,84)], randrange(2,6),randrange(70,84), 0) # ([x,y], length, stop_point, waittostart)
+                drops[n] = setup_drop(n*segments)
