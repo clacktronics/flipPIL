@@ -3,6 +3,7 @@ from time import sleep
 from threading import Timer
 import SimpleHTTPServer
 import SocketServer
+from config import timeline
 
 s=socket(AF_INET, SOCK_DGRAM)
 s.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
@@ -26,7 +27,7 @@ class perpetualTimer():
 	  self.thread.cancel()
 
 
-PORT = 1516
+PORT = 1515
 
 class MyRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 	def do_GET(self):
@@ -71,9 +72,23 @@ def sendStep():
 	print "sent" + message
 
 st = perpetualTimer(1,sendStep)
-st.start()
+# st.start()
 
 def main():
+
+	events = []
+	for timeEvent in timeline:
+		for event in timeline[timeEvent]:
+			if event[:4] in ['.mp3','.mp4','.wav']:
+				print "playing audio"
+			else:
+				pass
+				#e = lambda event: s.sendto(event,('',1515))
+				#events.append(Timer(timeEvent,e))
+
+	for event in events:
+		event.start()
+
 	print "Serving at port", PORT
 	httpd.serve_forever()
 
@@ -84,5 +99,3 @@ except (KeyboardInterrupt, SystemExit):
 	httpd.shutdown()
 except Exception as e:
 	print e
-	st.cancel()
-	httpd.shutdown()
