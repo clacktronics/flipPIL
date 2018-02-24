@@ -12,7 +12,14 @@ if __name__ == "__main__":
     from random import randrange
     refresh = [0x80,0x82,0x8F]
 
-    panel1 = flipil("alfa_zeta", [28, 7], [[2],[1]], init_color = 0, reverse_panel=False)
+    panel_adds =[
+		[0,32],[1,33],[2,34],[3,35],[4,36],[5,37],[6,38],[7,39],
+		[8,40],[9,41],[10,42],[11,43],[12,44],[13,45],[14,46],[15,47],
+		[16,48],[17,49],[18,50],[19,51],[20,52],[21,53],[22,54],[23,55],
+		[24,56],[25,57],[26,58],[27,59],[28,60],[29,61],[30,62],[31,63]
+		]
+
+    panel1 = flipil("alfa_zeta", [28, 7], panel_adds, init_color = 0, reverse_panel=False)
     panel1.set_port('/dev/ttyAMA0', 57600)
 
     def sim(image):
@@ -31,14 +38,14 @@ if __name__ == "__main__":
  
     draw = ImageDraw.Draw(panel1)
 
-    size = 2
+    size = 10
     dir_x = 1
     dir_y = 1
     x = 1
     y = 1
 
     while True:
-	sleep(.01)
+	#sleep(.01)
         print x, y
 
 	if x+size+2 > panel1.width or x < 1:

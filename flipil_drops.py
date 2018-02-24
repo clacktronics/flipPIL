@@ -7,11 +7,12 @@ foreground = 255
 background = 0
 direction = "down"
 
-# Set up network socket
-s=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.bind(('localhost',1515))
-
-panel_arr = [[8,16,24],[7,15,23],[6,14,22],[5,13,21],[4,12,20],[3,11,19],[2,10,18],[1,9,17]]
+panel_arr = [
+	    [31,63],[30,62],[29,61],[28,60],[27,59],[26,58],[25,57],[24,56],
+	    [23,55],[22,54],[21,53],[20,52],[19,51],[18,50],[17,49],[16,48],
+	    [15,47],[14,46],[13,45],[12,44],[11,43],[10,42],[9,41],[8,40],
+	    [7,39],[6,38],[5,37],[4,36],[3,35],[2,34],[1,33],[0,32]
+	    ]
 
 
 if __name__ == "__main__":
@@ -26,33 +27,23 @@ if __name__ == "__main__":
 
 
     def init_panel():
-        panel1 = flipil("alfa_zeta", [28,7], panel_arr, init_color = foreground)
-        panel1.set_port('/dev/tty.Bluetooth-Incoming-Port', 57600)
+        panel1 = flipil("alfa_zeta", [28,7], panel_arr, init_color = 0)
+        panel1.set_port('/dev/ttyAMA0', 57600)
         return panel1
 
     panel1 = init_panel()
 
-    def sim(image):
-        dot = 100
-        gap = 5
-        img = Image.new("L", (image.size[0]*(dot+gap),image.size[1]*(dot+gap)), color=50)
-        drw = ImageDraw.Draw(img)
-        for yn, y in enumerate(numpy.array(image).tolist()):
-            for xn, x in enumerate(y):
-                xpos = xn*(dot+gap)
-                ypos = yn*(dot+gap)
-                drw.ellipse((xpos, ypos, xpos+dot, ypos+dot), fill=x )
-        return img
 
     def setup_drop(segment):
 
         pos_x = segment + randrange(0, 5)
-        pos_y = randrange(-10,84)
+        pos_y = randrange(-10,56)
         length = randrange(2,6)
-        stop_point = randrange(70,84)
+        stop_point = randrange(56,64)
         waittostart = 0
 
         return drop([pos_x, pos_y], length, stop_point, waittostart)
+
 
 
 
@@ -87,65 +78,25 @@ if __name__ == "__main__":
     drops = []
     # Setup each drop in list
     # each drop has a window that it lives in which is the width / number of drops
-    for n in range(10):
-        segments = 56 / 10
-        drops.append(setup_drop(n*segments))
-    p = 0
-    ext = False
-
-
-
+    for n in range(30):
+        segments = 168 / 30
+        drops.append(setup_drop(56+n*segments))
 
 
     while True:
-        p = p+1
 
-
-
-
-        #sleep(.5)
-        while True:
-            m=s.recvfrom(4)
-            print m[0]
-
-
-            if m[0] == "step":
-                break
-            elif m[0] == "forw":
-                direction = "down"
-            elif m[0] == "back":
-                direction = "up"
-            elif m[0] == "bonw":
-                foreground = 0
-                background = 255
-                panel1.clear(background)
-                panel1._translate()
-                panel1.send()
-                print "Black on white set"
-            elif m[0] == "wonb":
-                foreground = 255
-                background = 0
-                panel1.clear(background)
-                panel1._translate()
-                panel1.send()
-                print "White on black set"
-            elif m[0] == "clear":
-                panel1.clear(background)
-                panel1._translate()
-                panel1.send()
-
+        sleep(.01)
 
         for i in range(len(drops)):
             print drops[i].pos
 
         panel1._translate()
         panel1.send()
-        panel1.clear(background)
+        panel1.clear(0)
 
         for n, i in enumerate(drops):
 
             drops[n].move()
-
 
             for d, x in enumerate(drops[n].pos):
                 x = drops[n].pos[d][1]
@@ -156,5 +107,9 @@ if __name__ == "__main__":
                     pass
 
             if drops[n].end == True:
-                segments = 56 / 5
-                drops[n] = setup_drop(n*segments)
+                segments = 168 / 30
+                drops[n] = setup_drop(56+n*segments)
+
+	for n in range(10):
+		segments = 56 / 10
+		panel1.putpixel([segments*n+randrange(0,segments), randrange(0,56)],randrange(0,2))
