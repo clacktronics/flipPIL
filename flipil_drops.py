@@ -37,7 +37,7 @@ if __name__ == "__main__":
     def setup_drop(segment):
 
         pos_x = segment + randrange(0, 5)
-        pos_y = randrange(-10,20)
+        pos_y = randrange(-10,40)
         length = randrange(2,8)
         stop_point = randrange(56,64)
         waittostart = 0
@@ -83,7 +83,7 @@ if __name__ == "__main__":
         drops.append(setup_drop(56+(n*segments)))
 
     bottom_drops = []
-    for n in range(8):
+    for n in range(9):
     	bottom_drops.append([randrange(0,1+n*7),randrange(0,56)])
 
     while True:
@@ -116,8 +116,16 @@ if __name__ == "__main__":
                 segments = 7
                 drops[n] = setup_drop(56+(n*segments))
 
-	for n in range(7):
-		dice = randrange(0,2)
-		if dice == 1:
-			bottom_drops[n] = [randrange(0,1+n*7),randrange(0,56)]
-		panel1.putpixel(bottom_drops[n], foreground) 
+	for n in range(9):
+		dice = randrange(0,11)
+		if dice == 5:
+			bottom_drops[n] = [randrange(0,1+(n*7)),randrange(0,56)]
+			try:
+				panel1.putpixel(bottom_drops[n], randrange(0,2))
+			except:
+				pass
+		else:
+			try:
+				panel1.putpixel(bottom_drops[n], 1) 
+			except:
+				pass
