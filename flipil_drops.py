@@ -37,8 +37,8 @@ if __name__ == "__main__":
     def setup_drop(segment):
 
         pos_x = segment + randrange(0, 5)
-        pos_y = randrange(-10,56)
-        length = randrange(2,6)
+        pos_y = randrange(-10,20)
+        length = randrange(2,8)
         stop_point = randrange(56,64)
         waittostart = 0
 
@@ -79,16 +79,21 @@ if __name__ == "__main__":
     # Setup each drop in list
     # each drop has a window that it lives in which is the width / number of drops
     for n in range(30):
-        segments = 168 / 30
-        drops.append(setup_drop(56+n*segments))
+        segments = 7
+        drops.append(setup_drop(56+(n*segments)))
 
+    bottom_drops = []
+    for n in range(8):
+    	bottom_drops.append([randrange(0,1+n*7),randrange(0,56)])
 
     while True:
 
         sleep(.01)
 
         for i in range(len(drops)):
+	    print str(i) + " ",
             print drops[i].pos
+	print ""
 
         panel1._translate()
         panel1.send()
@@ -104,12 +109,15 @@ if __name__ == "__main__":
                 try:
                     panel1.putpixel([x,y], foreground)
                 except:
-                    pass
+		    pass
+                    #print "error " + str(n)
 
             if drops[n].end == True:
-                segments = 168 / 30
-                drops[n] = setup_drop(56+n*segments)
+                segments = 7
+                drops[n] = setup_drop(56+(n*segments))
 
-	for n in range(10):
-		segments = 56 / 10
-		panel1.putpixel([segments*n+randrange(0,segments), randrange(0,56)],randrange(0,2))
+	for n in range(7):
+		dice = randrange(0,2)
+		if dice == 1:
+			bottom_drops[n] = [randrange(0,1+n*7),randrange(0,56)]
+		panel1.putpixel(bottom_drops[n], foreground) 

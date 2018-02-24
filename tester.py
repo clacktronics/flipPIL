@@ -15,7 +15,8 @@ refresh = bytearray([0x80,0x82,0x8F])
 
 adds = [11,4,14,19,9,16,15,10,43,36,46,51,41,48,47,42]
 x = 0
-while True:
+loops = 0
+while loops < 2:
 	for m in range(5):
 	        for i in range(28):
         	    message[i+3] = 0x7F
@@ -32,5 +33,7 @@ while True:
 	        sleep(.1)
 
 	x += 1
-	if x > 63: x = 0
+	if x > 63: 
+		x = 0
+		loops +=1
         message[2] = x #adds[x]
